@@ -76,8 +76,37 @@
 
 ; part 2
 
-(defn converge
-  "Same as iterate, but stops once the value doesn't change anymore."
-  [f x]
-  (iterate f x))
+(def test-input2 (mapv (comp vec seq) test-input))
+
+(def input2 (mapv (comp vec seq) input))
+
+(defn move
+  [input]
+  (->> (all-pos input)
+       (keep (fn [pos]
+              (when (removable? input pos)
+                pos)))
+       (reduce (fn [a [r c :as _e]] (assoc-in a [r c] \.)) input)))
+
+(defn until-repeat
+  [[f s :as sq]]
+  (if (or (= f s)
+          (nil? s))
+    (list f)
+    (cons f (until-repeat (rest sq)))))
+
+(defn count-rolls
+  [input]
+  (count (filter #(= % \@) (apply concat input))))
+
+(defn solve2
+  [input]
+  (- (count-rolls input)
+     (count-rolls (last (until-repeat (iterate move input))))))
+
+; 43
+(solve2 test-input2)
+
+; 8366
+(solve2 input2)
 
