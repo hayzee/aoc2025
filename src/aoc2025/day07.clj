@@ -1,4 +1,4 @@
-(ns aoc2025.day06)
+```(ns aoc2025.day06)
 
 ; part 1
 
